@@ -22,6 +22,12 @@ public class float3 {
         return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
     }
 
+    public float2 worldToScreen() {
+        double screenX = x * 200 + 540;
+        double screenY = y * 200 + 350;
+        return new float2(screenX, screenY);
+    }
+
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }

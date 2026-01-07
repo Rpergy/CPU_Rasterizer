@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Mesh {
     public ArrayList<float3> vertices;
-    public ArrayList<float3> faces;
+    public ArrayList<Face> faces;
 
     public Mesh(String filepath) {
         File file = new File(filepath);
@@ -27,8 +27,10 @@ public class Mesh {
                     for (int i = 2; i < splitData.length - 1; i++) {
                         int secondIndex = Integer.parseInt(splitData[i].split("/")[0]);
                         int thirdIndex = Integer.parseInt(splitData[i+1].split("/")[0]);
-                        float3 face = new float3(firstIndex, secondIndex, thirdIndex);
-                        faces.add(face);
+
+                        float3 faceVerts = new float3(firstIndex, secondIndex, thirdIndex);
+                        Color col = new Color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256));
+                        faces.add(new Face(faceVerts, col));
                     }
                 }
             }

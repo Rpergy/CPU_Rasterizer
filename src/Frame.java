@@ -21,14 +21,17 @@ public class Frame {
     public int width() { return frame.cols(); }
     public int height() { return frame.rows(); }
 
-    public void renderMesh(Mesh m) {
-        for (int i = 0; i < m.faces.size(); i++) {
-            float3 face = m.faces.get(i);
-            renderTriangle(m.vertices.get((int)face.x-1).tofloat2(), m.vertices.get((int)face.y-1).tofloat2(), m.vertices.get((int)face.z-1).tofloat2());
+    public void renderMesh(Mesh mesh) {
+        for (int i = 0; i < mesh.faces.size(); i++) {
+            float3 face = mesh.faces.get(i).getVertices();
+            float2 p1 = mesh.vertices.get((int)face.x-1).worldToScreen();
+            float2 p2 = mesh.vertices.get((int)face.y-1).worldToScreen();
+            float2 p3 = mesh.vertices.get((int)face.z-1).worldToScreen();
+            renderTriangle(p1, p2, p3, mesh.faces.get(i).getColor());
         }
     }
 
-    public void renderTriangle(float2 a, float2 b, float2 c) {
+    public void renderTriangle(float2 a, float2 b, float2 c, Color col) {
         int xMin = (int)Math.min(Math.min(a.x, b.x), c.x);
         int xMax = (int)Math.max(Math.max(a.x, b.x), c.x);
         int yMin = (int)Math.min(Math.min(a.y, b.y), c.y);
@@ -36,8 +39,9 @@ public class Frame {
 
         for (int x = xMin; x < xMax; x++) {
             for (int y = yMin; y < yMax; y++) {
-                if (pointInsideTriangle(a, b, c, new float2(x, y)))
-                    set(x, y, new Color(255, 255, 255));
+                if (pointInsideTriangle(a, b, c, new float2(x, y))) {
+                    set(x, y, col);
+                }
             }
         }
     }
