@@ -8,10 +8,11 @@ public class Mesh {
     public ArrayList<Face> faces;
 
     public Mesh(String filepath) {
-        File file = new File(filepath);
-
         vertices = new ArrayList();
         faces = new ArrayList();
+
+        if (filepath.equals("")) return;
+        File file = new File(filepath);
 
         try (Scanner reader = new Scanner(file)) {
             while (reader.hasNextLine()) {

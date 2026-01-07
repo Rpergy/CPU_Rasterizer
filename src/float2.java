@@ -18,8 +18,8 @@ public class float2 {
 
     public float2 add(float2 v) { return new float2(x + v.x, y + v.y); }
     public float2 sub(float2 v) { return new float2(x - v.x, y - v.y); }
-    public float2 mul(float s) { return new float2(x * s, y * s); }
-    public float2 div(float s) { return new float2(x / s, y / s); }
+    public float2 mul(double s) { return new float2(x * s, y * s); }
+    public float2 div(double s) { return new float2(x / s, y / s); }
 
     public static double dot(float2 v1, float2 v2) {
         return v1.x * v2.x + v1.y * v2.y;

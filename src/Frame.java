@@ -21,12 +21,12 @@ public class Frame {
     public int width() { return frame.cols(); }
     public int height() { return frame.rows(); }
 
-    public void renderMesh(Mesh mesh) {
+    public void renderMesh(Mesh mesh, Transform transform, double fov) {
         for (int i = 0; i < mesh.faces.size(); i++) {
             float3 face = mesh.faces.get(i).getVertices();
-            float2 p1 = mesh.vertices.get((int)face.x-1).worldToScreen();
-            float2 p2 = mesh.vertices.get((int)face.y-1).worldToScreen();
-            float2 p3 = mesh.vertices.get((int)face.z-1).worldToScreen();
+            float2 p1 = mesh.vertices.get((int)face.x-1).worldToScreen(transform, fov);
+            float2 p2 = mesh.vertices.get((int)face.y-1).worldToScreen(transform, fov);
+            float2 p3 = mesh.vertices.get((int)face.z-1).worldToScreen(transform, fov);
             renderTriangle(p1, p2, p3, mesh.faces.get(i).getColor());
         }
     }
@@ -36,6 +36,8 @@ public class Frame {
         int xMax = (int)Math.max(Math.max(a.x, b.x), c.x);
         int yMin = (int)Math.min(Math.min(a.y, b.y), c.y);
         int yMax = (int)Math.max(Math.max(a.y, b.y), c.y);
+
+        if (xMin < 0 || xMax >= frame.cols() || yMin < 0 || yMax >= frame.rows()) return;
 
         for (int x = xMin; x < xMax; x++) {
             for (int y = yMin; y < yMax; y++) {
@@ -59,6 +61,10 @@ public class Frame {
         double line2 = float2.dot(BtoC, float2.perp(BtoP));
         double line3 = float2.dot(CtoA, float2.perp(CtoP));
 
-        return line1 >= 0 && line2 >= 0 && line3 >= 0;
+        boolean l1 = line1 >= 0;
+        boolean l2 = line2 >= 0;
+        boolean l3 = line3 >= 0;
+
+        return l1 == false && l1 == l2 && l2 == l3;
     }
 }
