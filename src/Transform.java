@@ -1,17 +1,32 @@
 public class Transform {
     float3 position;
-    float3 rotation;
+    double yaw, pitch, roll;
 
     public Transform() {
         position = new float3(0, 0, 0);
-        rotation = new float3(0, 0, 0);
+        yaw = 0.0;
+        pitch = 0.0;
+        roll = 0.0;
     }
 
     public static float3 pointToWorld(float3 point, Transform transform) {
-        float3 iHat = new float3(Math.cos(transform.rotation.x), 0, Math.sin(transform.rotation.x));
-        float3 jHat = new float3(-Math.sin(transform.rotation.x), 0, Math.cos(transform.rotation.x));
+        double xx = point.x * (Math.cos(transform.yaw) * Math.cos(transform.pitch));
+        double xy = point.y * (Math.cos(transform.yaw) * Math.sin(transform.pitch) * Math.sin(transform.roll) - Math.sin(transform.yaw) * Math.cos(transform.roll));
+        double xz = point.z * (Math.cos(transform.yaw) * Math.sin(transform.pitch) * Math.cos(transform.roll) + Math.sin(transform.yaw) * Math.sin(transform.roll));
+        double x = xx + xy + xz;
 
-        float3 rotated = iHat.mul(point.x).add(jHat.mul(point.z)).add(new float3(0, point.y, 0));
+        double yx = point.x * (Math.sin(transform.yaw) * Math.cos(transform.pitch));
+        double yy = point.y * (Math.sin(transform.yaw) * Math.sin(transform.pitch) * Math.sin(transform.roll) + Math.cos(transform.yaw) * Math.cos(transform.roll));
+        double yz = point.z * (Math.sin(transform.yaw) * Math.sin(transform.pitch) * Math.cos(transform.roll) - Math.cos(transform.yaw) * Math.sin(transform.roll));
+        double y = yx + yy + yz;
+
+        double zx = point.x * -Math.sin(transform.pitch);
+        double zy = point.y * (Math.cos(transform.pitch) * Math.sin(transform.roll));
+        double zz = point.z * (Math.cos(transform.pitch) * Math.cos(transform.roll));
+
+        double z = zx + zy + zz;
+
+        float3 rotated = new float3(x, y, z);
 
         return rotated.add(transform.position);
     }
