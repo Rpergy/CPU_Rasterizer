@@ -8,12 +8,6 @@ public class Frame {
     public Frame(int width, int height) {
          frame = new Mat(height, width, CvType.CV_8UC3);
          depthBuffer = new Mat(height, width, CvType.CV_64FC1);
-
-         for (int x = 0; x < depthBuffer.cols(); x++) {
-             for (int y = 0; y < depthBuffer.rows(); y++) {
-                 setDepthBuffer(x, y, Double.MAX_VALUE);
-             }
-         }
     }
 
     public void setDepthBuffer(int x, int y, double depth) {
@@ -58,7 +52,7 @@ public class Frame {
                     double depth = interpolateDepth(a, b, c, new float2(x, y));
 //                    depth = 182.1*(depth-3.5);
 
-                    if (depth < depthBuffer.get(y, x)[0]) {
+                    if (depth < depthBuffer.get(y, x)[0] || depthBuffer.get(y, x)[0] == 0.0) {
                         setColor(x, y, col);
                         setDepthBuffer(x, y, depth);
                     }
