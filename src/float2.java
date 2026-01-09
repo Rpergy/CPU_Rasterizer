@@ -21,6 +21,11 @@ public class float2 {
     public float2 mul(double s) { return new float2(x * s, y * s); }
     public float2 div(double s) { return new float2(x / s, y / s); }
 
+    public static float3 cross(float2 v1, float2 v2) {
+        double z = v1.x * v2.y - v1.y * v2.x;
+        return new float3(0, 0, z);
+    }
+
     public static double dot(float2 v1, float2 v2) {
         return v1.x * v2.x + v1.y * v2.y;
     }

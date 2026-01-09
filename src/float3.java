@@ -27,7 +27,14 @@ public class float3 {
         return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
     }
 
-    public float2 worldToScreen(Transform transform, double fov) {
+    public static float3 cross(float3 v1, float3 v2) {
+        double x = v1.y * v2.z - v1.z * v2.y;
+        double y = v1.z * v2.x - v1.x * v2.z;
+        double z = v1.x * v2.y - v1.y * v2.x;
+        return new float3(x, y, z);
+    }
+
+    public float3 worldToScreen(Transform transform, double fov) {
         float3 worldPoint = Transform.pointToWorld(this, transform);
 
         float2 resolution = new float2(1080, 700);
@@ -37,7 +44,8 @@ public class float3 {
 
         float2 pixelOffset = new float2(worldPoint.x, worldPoint.y).mul(pixelsPerWorldUnit);
         float2 vertexScreen = resolution.div(2).add(pixelOffset);
-        return vertexScreen;
+        float3 vertexWorld = new float3(vertexScreen.x, vertexScreen.y, worldPoint.z);
+        return vertexWorld;
     }
 
     public String toString() {
